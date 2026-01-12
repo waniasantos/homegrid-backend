@@ -1,0 +1,47 @@
+service: homegrid-backend
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    MEDICOES_TABLE_NAME: HomeGrid_Medicoes
+    EVENT_BUS_NAME: HomeGridEventBus
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:Query
+          Resource: !GetAtt MedicoesTable.Arn
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource: !GetAtt EventBus.Arn
+
+plugins:
+  - serverless-offline # Apenas este plugin é necessário agora
+
+resources:
+  Resources:
+    MedicoesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: HomeGrid_Medicoes
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: dispositivoId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: dispositivoId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+
+    EventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: HomeGridEventBus

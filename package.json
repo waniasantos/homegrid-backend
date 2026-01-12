@@ -1,0 +1,28 @@
+{
+  "name": "homegrid-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.159",
+    "@types/node": "^25.0.6",
+    "esbuild": "^0.27.2",
+    "nodemon": "^3.1.11",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-offline": "^14.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.966.0",
+    "@aws-sdk/client-eventbridge": "^3.966.0",
+    "@aws-sdk/lib-dynamodb": "^3.966.0",
+    "uuid": "^13.0.0"
+  }
+}

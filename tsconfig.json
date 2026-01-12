@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                /* Versão moderna do JS para Node 18/20 */
+    "module": "CommonJS",              /* Padrão para Node.js/AWS Lambda */
+    "lib": ["ES2022"],
+    "outDir": "./dist",                
+    "rootDir": "./src",                
+    "strict": true,                    
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
