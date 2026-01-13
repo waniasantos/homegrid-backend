@@ -13,7 +13,7 @@ provider:
         - Effect: Allow
           Action:
             - dynamodb:PutItem
-            - dynamodb:Query
+            - dynamodb:Scan
           Resource: !GetAtt MedicoesTable.Arn
         - Effect: Allow
           Action:
@@ -28,13 +28,7 @@ package:
     - '!tsconfig.json'
     - '!awscliv2.zip'
     - '!aws/**'
-    - '!node_modules/serverless-offline/**'
-    - '!node_modules/serverless-dynamodb-local/**'
-    - '!node_modules/@types/**'
-    - '!node_modules/typescript/**'
-    - '!node_modules/ts-node/**'
-    - '!node_modules/nodemon/**'
-    - '!node_modules/esbuild/**'
+    - '!.serverless/**'
     - 'dist/**'
     - 'node_modules/**'
 
@@ -43,11 +37,19 @@ plugins:
 
 functions:
   armazenarMedicao:
-    handler: dist/modules/ingestion/interfaces/http/lambdaHandler.handler
+    handler: dist/modules/ingestion/interfaces/http/armazenarMedicaoHandler.handler
     events:
       - http:
           path: medicao
           method: post
+          cors: true
+
+  listarMedicoes:
+    handler: dist/modules/ingestion/interfaces/http/listarMedicoesHandler.handler
+    events:
+      - http:
+          path: medicoes
+          method: get
           cors: true
 
 resources:
