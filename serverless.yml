@@ -20,8 +20,35 @@ provider:
             - events:PutEvents
           Resource: !GetAtt EventBus.Arn
 
+package:
+  patterns:
+    - '!.git/**'
+    - '!src/**'
+    - '!*.md'
+    - '!tsconfig.json'
+    - '!awscliv2.zip'
+    - '!aws/**'
+    - '!node_modules/serverless-offline/**'
+    - '!node_modules/serverless-dynamodb-local/**'
+    - '!node_modules/@types/**'
+    - '!node_modules/typescript/**'
+    - '!node_modules/ts-node/**'
+    - '!node_modules/nodemon/**'
+    - '!node_modules/esbuild/**'
+    - 'dist/**'
+    - 'node_modules/**'
+
 plugins:
-  - serverless-offline # Apenas este plugin é necessário agora
+  - serverless-offline
+
+functions:
+  armazenarMedicao:
+    handler: dist/modules/ingestion/interfaces/http/lambdaHandler.handler
+    events:
+      - http:
+          path: medicao
+          method: post
+          cors: true
 
 resources:
   Resources:
@@ -40,7 +67,7 @@ resources:
             KeyType: HASH
           - AttributeName: timestamp
             KeyType: RANGE
-
+    
     EventBus:
       Type: AWS::Events::EventBus
       Properties:

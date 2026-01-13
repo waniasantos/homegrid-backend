@@ -1,1 +1,41 @@
-node_modules
+# Dependências
+node_modules/
+package-lock.json
+
+# Build
+dist/
+
+# AWS
+aws/
+awscliv2.zip
+.aws/
+
+# Credenciais 
+.env
+.env.*
+*.pem
+*.key
+credentials
+config
+
+# Serverless
+.serverless/
+.serverlessignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporários
+*.zip
+*.tar.gz
