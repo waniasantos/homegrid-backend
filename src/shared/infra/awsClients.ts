@@ -3,9 +3,8 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { EventBridgeClient } from "@aws-sdk/client-eventbridge";
 
 const region = process.env.AWS_REGION || "us-east-1";
-const isOffline = process.env.IS_OFFLINE; // Variável injetada pelo plugin
+const isOffline = process.env.IS_OFFLINE; 
 
-// Configuração Dinâmica do DynamoDB
 const dbConfig = isOffline
   ? {
       region: "localhost",
@@ -17,7 +16,6 @@ const dbConfig = isOffline
     }
   : { region };
 
-// Inicializa DynamoDB
 const dbClient = new DynamoDBClient(dbConfig);
 export const dynamoDbClient = DynamoDBDocumentClient.from(dbClient);
 

@@ -6,6 +6,7 @@ provider:
   region: us-east-1
   environment:
     MEDICOES_TABLE_NAME: HomeGrid_Medicoes
+    ANOMALIAS_TABLE_NAME: HomeGrid_Anomalias
     EVENT_BUS_NAME: HomeGridEventBus
   iam:
     role:
@@ -14,11 +15,14 @@ provider:
           Action:
             - dynamodb:PutItem
             - dynamodb:Scan
-          Resource: !GetAtt MedicoesTable.Arn
+            - dynamodb:Query
+          Resource: 
+            - !GetAtt MedicoesTable.Arn
+            - !GetAtt AnomaliasTable.Arn
         - Effect: Allow
           Action:
             - events:PutEvents
-          Resource: !GetAtt EventBus.Arn
+          Resource: arn:aws:events:us-east-1:349525696880:event-bus/HomeGridEventBus
 
 package:
   patterns:
@@ -52,6 +56,25 @@ functions:
           method: get
           cors: true
 
+  detectarAnomalia:
+    handler: dist/modules/detector/interfaces/eventbridge/detectarAnomaliaHandler.handler
+    events:
+      - eventBridge:
+          eventBus: HomeGridEventBus
+          pattern:
+            source:
+              - homegrid.ingestion
+            detail-type:
+              - MedicaoRecebida
+
+  listarAnomalias:
+    handler: dist/modules/detector/interfaces/http/listarAnomaliasHandler.handler
+    events:
+      - http:
+          path: anomalias
+          method: get
+          cors: true
+
 resources:
   Resources:
     MedicoesTable:
@@ -70,7 +93,18 @@ resources:
           - AttributeName: timestamp
             KeyType: RANGE
     
-    EventBus:
-      Type: AWS::Events::EventBus
+    AnomaliasTable:
+      Type: AWS::DynamoDB::Table
       Properties:
-        Name: HomeGridEventBus
+        TableName: HomeGrid_Anomalias
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE

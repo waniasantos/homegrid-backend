@@ -34,7 +34,6 @@ export class DynamoDBMedicaoRepository implements IMedicaoRepository {
 
     try {
       const result = await dynamoDbClient.send(params);
-      // Ordenar por timestamp (mais recentes primeiro)
       const items = result.Items || [];
       return items.sort((a, b) => 
         new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
